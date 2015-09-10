@@ -2830,7 +2830,9 @@ class RetrieveThreadTest(
             "title": "Test Title",
             "body": "Test body",
             "created_at": "2015-05-29T00:00:00Z",
-            "updated_at": "2015-05-29T00:00:00Z"
+            "updated_at": "2015-05-29T00:00:00Z",
+            "resp_total": 0,
+
         })
         cs_data.update(overrides or {})
         self.register_get_thread_response(cs_data)
@@ -2863,9 +2865,10 @@ class RetrieveThreadTest(
             "read": False,
             "has_endorsed": False,
             "id": "test_thread",
-            "type": "discussion"
+            "type": "discussion",
+            "response_count": 2,
         }
-        self.register_thread()
+        self.register_thread({"resp_total": 2})
         self.assertEqual(get_thread(self.request, self.thread_id), expected_response_data)
         self.assertEqual(httpretty.last_request().method, "GET")
 
@@ -2902,7 +2905,8 @@ class RetrieveThreadTest(
             "read": False,
             "has_endorsed": False,
             "id": "test_thread",
-            "type": "discussion"
+            "type": "discussion",
+            "response_count": 0,
         }
         non_author_user = UserFactory.create()  # pylint: disable=attribute-defined-outside-init
         self.register_get_user_response(non_author_user)
